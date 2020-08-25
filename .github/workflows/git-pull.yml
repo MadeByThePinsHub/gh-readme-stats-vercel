@@ -1,0 +1,55 @@
+# This is a basic workflow that is manually triggered
+
+name: Pull from upstream and generate an PR
+
+on:
+  push: 
+    branches: [ master ]
+  schedule:
+    - cron: "* */6 * * *"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  generate-pr:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v2.3.2
+      with:
+        fetch-depth: '10'
+        ref: 'master'
+    
+    - name: Add upstream to the remotes list
+      run: git remote add upstream https://github.com/anuraghazra/github-readme-stats.git && git fetch --all
+    
+    - name: Checkout the upstream repo as new branch
+      run: git checkout -b upstream-pull --track upstream/master
+      
+    - name: Generate a random seed.
+      run: |
+        date> random-seed-input.txt
+        base64 random-seed.txt> random-seed-output.txt
+    
+    - name: Generate a new Pull Request
+      uses: peter-evans/create-pull-request@3.1.2
+      with:
+        token: ${{ secrets.GH_SERVICE_ACCOUNT_API_KEY }}
+        author:  RecapTimeBot <RecapTimeBot@users.noreply.github.com>
+        branch: upstream-pull
+        base: master
+        title: "[pull] master from the upstream repository"
+        body: |
+          See [Commits](/anuraghazra/github-readme-stats/commits/master) for more details about the changes happened in the upstream repo.
+          
+          ---
+         
+          This PR was generated using this action.
+        assignees: ThePinsTeam
+        reviewers: AndreiJirohHaliliDev2006
+        labels: "arrow_heading_down: pull"
+      
