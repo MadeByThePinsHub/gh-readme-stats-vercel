@@ -28,13 +28,7 @@ jobs:
       run: git remote add upstream https://github.com/anuraghazra/github-readme-stats.git && git fetch --all
     
     - name: Checkout the upstream repo as new branch
-      run: git checkout -b upstream-pull --track upstream/master
-      
-    - name: Generate a random seed.
-      run: |
-        date> random-seed-input.txt
-        base64 random-seed-input.txt> random-seed-output.txt
-        cat random-seed-output.txt
+      run: git checkout "upstream/queued" "upstream/master" 
     
     - name: Generate a new Pull Request
       ## Gonna use dev branch instead of prod-grade tag. Good luck!
@@ -42,7 +36,7 @@ jobs:
       with:
         token: ${{ secrets.GH_SERVICE_ACCOUNT_API_KEY }}
         author:  RecapTimeBot <RecapTimeBot@users.noreply.github.com>
-        branch: upstream-pull
+        branch: upstream/queued
         base: master
         title: "[pull] master from the upstream repository"
         body: |
