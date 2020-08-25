@@ -36,7 +36,8 @@ jobs:
         base64 random-seed.txt> random-seed-output.txt
     
     - name: Generate a new Pull Request
-      uses: peter-evans/create-pull-request@3.1.2
+      ## Gonna use dev branch instead of prod-grade tag. Good luck!
+      uses: peter-evans/create-pull-request@master
       with:
         token: ${{ secrets.GH_SERVICE_ACCOUNT_API_KEY }}
         author:  RecapTimeBot <RecapTimeBot@users.noreply.github.com>
