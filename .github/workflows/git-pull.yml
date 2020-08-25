@@ -33,7 +33,7 @@ jobs:
     - name: Generate a random seed.
       run: |
         date> random-seed-input.txt
-        base64 random-seed.txt> random-seed-output.txt
+        base64 random-seed-input.txt> random-seed-output.txt
     
     - name: Generate a new Pull Request
       ## Gonna use dev branch instead of prod-grade tag. Good luck!
