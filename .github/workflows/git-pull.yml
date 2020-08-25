@@ -23,29 +23,14 @@ jobs:
       with:
         fetch-depth: '10'
         ref: 'master'
+        token: ${{ secrets.GH_SERVICE_ACCOUNT_API_KEY }}
     
     - name: Add upstream to the remotes list
       run: git remote add upstream https://github.com/anuraghazra/github-readme-stats.git && git fetch --all
     
     - name: Checkout the upstream repo as new branch
-      run: git checkout -b "upstream/queued" "upstream/master" 
+      run: git checkout -b "upstream/queued" "upstream/master"
     
-    - name: Generate a new Pull Request
-      ## Gonna use dev branch instead of prod-grade tag. Good luck!
-      uses: peter-evans/create-pull-request@master
-      with:
-        token: ${{ secrets.GH_SERVICE_ACCOUNT_API_KEY }}
-        author:  RecapTimeBot <RecapTimeBot@users.noreply.github.com>
-        branch: upstream/queued
-        base: master
-        title: "[pull] master from the upstream repository"
-        body: |
-          See [Commits](/anuraghazra/github-readme-stats/commits/master) for more details about the changes happened in the upstream repo.
-          
-          ---
-         
-          This PR was generated successfully using [this action](https://github.com/MadeByThePinsHub/gh-readme-stats-vercel/blob/master/.github/workflows/git-pull.yml).
-        assignees: ThePinsTeam
-        reviewers: AndreiJirohHaliliDev2006
-        labels: "arrow_heading_down: pull"
-      
+    - name: Push it!
+      run: git push origin upstream/queued
+    
