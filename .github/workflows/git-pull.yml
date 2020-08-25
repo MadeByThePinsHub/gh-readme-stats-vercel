@@ -28,7 +28,7 @@ jobs:
       run: git remote add upstream https://github.com/anuraghazra/github-readme-stats.git && git fetch --all
     
     - name: Checkout the upstream repo as new branch
-      run: git checkout "upstream/queued" "upstream/master" 
+      run: git checkout -b "upstream/queued" "upstream/master" 
     
     - name: Generate a new Pull Request
       ## Gonna use dev branch instead of prod-grade tag. Good luck!
