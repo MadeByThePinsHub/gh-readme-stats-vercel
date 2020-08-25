@@ -34,6 +34,7 @@ jobs:
       run: |
         date> random-seed-input.txt
         base64 random-seed-input.txt> random-seed-output.txt
+        cat random-seed-output.txt
     
     - name: Generate a new Pull Request
       ## Gonna use dev branch instead of prod-grade tag. Good luck!
@@ -49,7 +50,7 @@ jobs:
           
           ---
          
-          This PR was generated using this action.
+          This PR was generated successfully using [this action](https://github.com/MadeByThePinsHub/gh-readme-stats-vercel/blob/master/.github/workflows/git-pull.yml).
         assignees: ThePinsTeam
         reviewers: AndreiJirohHaliliDev2006
         labels: "arrow_heading_down: pull"
