@@ -26,7 +26,10 @@ jobs:
         token: ${{ secrets.GH_SERVICE_ACCOUNT_API_KEY }}
     
     - name: Add upstream to the remotes list
-      run: git remote add upstream https://github.com/anuraghazra/github-readme-stats.git && git fetch --all
+      run: |
+        git remote add upstream https://github.com/anuraghazra/github-readme-stats.git
+        git remote set-url origin https://RecapTimeBot:${GH_SERVICE_ACCOUNT_API_KEY}@github.com/MadeByThePinsHub/gh-readme-stats-vercel
+        git fetch --all
     
     - name: Checkout the upstream repo as new branch
       run: git checkout -b "upstream/queued" "upstream/master"
