@@ -1,0 +1,10 @@
+version: "1"
+rules:
+  - base: master
+    upstream: upstream-pull    # change `wei` to the owner of upstream repo
+    mergeMethod: merge
+    reviewers:
+      - AndreiJirohHaliliDev2006
+      - TipzTeam
+    assignees:
+      - ThePinsTeam
