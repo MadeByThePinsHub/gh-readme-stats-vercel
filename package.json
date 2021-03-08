@@ -36,9 +36,9 @@
   "devDependencies": {
     "@actions/core": "^1.9.1",
     "@actions/github": "^4.0.0",
-    "@testing-library/dom": "^8.17.1",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@uppercod/css-to-object": "^1.1.1",
+    "@testing-library/dom": "^7.20.0",
+    "@testing-library/jest-dom": "^5.11.0",
+    "axios": "^0.21.1",
     "axios-mock-adapter": "^1.18.1",
     "css-to-object": "^1.1.0",
     "husky": "^5.1.3",
