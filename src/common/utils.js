@@ -14,7 +14,7 @@ const renderError = (message, secondaryMessage = "") => {
     <text x="25" y="45" class="text">Something went wrong! file an issue at https://git.io/JJmN9</text>
     <text data-testid="message" x="25" y="55" class="text small">
       <tspan x="25" dy="18">${encodeHTML(message)}</tspan>
-      <tspan x="25" dy="18"  class="gray">${secondaryMessage}</tspan>
+      <tspan x="25" dy="18" class="gray">${secondaryMessage}</tspan>
     </text>
     </svg>
   `;
@@ -37,7 +37,7 @@ function kFormatter(num) {
 
 function isValidHexColor(hexColor) {
   return new RegExp(
-    /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{4})$/
+    /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{4})$/,
   ).test(hexColor);
 }
 
@@ -60,8 +60,22 @@ function clampValue(number, min, max) {
   return Math.max(min, Math.min(number, max));
 }
 
+function isValidGradient(colors) {
+  return isValidHexColor(colors[1]) && isValidHexColor(colors[2]);
+}
+
 function fallbackColor(color, fallbackColor) {
-  return (isValidHexColor(color) && `#${color}`) || fallbackColor;
+  let colors = color.split(",");
+  let gradient = null;
+
+  if (colors.length > 1 && isValidGradient(colors)) {
+    gradient = colors;
+  }
+
+  return (
+    (gradient ? gradient : isValidHexColor(color) && `#${color}`) ||
+    fallbackColor
+  );
 }
 
 function request(data, headers) {
@@ -110,19 +124,19 @@ function getCardColors({
   // finally if both colors are invalid fallback to default theme
   const titleColor = fallbackColor(
     title_color || selectedTheme.title_color,
-    "#" + defaultTheme.title_color
+    "#" + defaultTheme.title_color,
   );
   const iconColor = fallbackColor(
     icon_color || selectedTheme.icon_color,
-    "#" + defaultTheme.icon_color
+    "#" + defaultTheme.icon_color,
   );
   const textColor = fallbackColor(
     text_color || selectedTheme.text_color,
-    "#" + defaultTheme.text_color
+    "#" + defaultTheme.text_color,
   );
   const bgColor = fallbackColor(
     bg_color || selectedTheme.bg_color,
-    "#" + defaultTheme.bg_color
+    "#" + defaultTheme.bg_color,
   );
 
   return { titleColor, iconColor, textColor, bgColor };
@@ -153,8 +167,26 @@ const logger =
 const CONSTANTS = {
   THIRTY_MINUTES: 1800,
   TWO_HOURS: 7200,
+  FOUR_HOURS: 14400,
   ONE_DAY: 86400,
 };
+
+const SECONDARY_ERROR_MESSAGES = {
+  MAX_RETRY:
+    "Please add an env variable called PAT_1 with your github token in vercel",
+  USER_NOT_FOUND: "Make sure the provided username is not an organization",
+};
+
+class CustomError extends Error {
+  constructor(message, type) {
+    super(message);
+    this.type = type;
+    this.secondaryMessage = SECONDARY_ERROR_MESSAGES[type] || "adsad";
+  }
+
+  static MAX_RETRY = "MAX_RETRY";
+  static USER_NOT_FOUND = "USER_NOT_FOUND";
+}
 
 module.exports = {
   renderError,
@@ -171,4 +203,5 @@ module.exports = {
   wrapTextMultiline,
   logger,
   CONSTANTS,
+  CustomError,
 };
